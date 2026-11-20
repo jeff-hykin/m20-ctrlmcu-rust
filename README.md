@@ -11,7 +11,7 @@ binary and its logs; see [PROTOCOL.md](PROTOCOL.md).
   builds them (`Command::from_vendor`).
 - `client`: request/reply over a writer and a reader thread; a `Policy` refuses lights, fans or power before a byte
   is written (only queries are allowed by default).
-- `serial` (unix): the UART, read-only or read-write.
+- `serial` (unix): the UART, read-only or read-write, and a reader that can be stopped while it waits.
 
 ```rust
 use m20_ctrlmcu::{Command, FrontBack, Sequence};

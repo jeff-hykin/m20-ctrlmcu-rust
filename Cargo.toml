@@ -1,6 +1,6 @@
 [package]
 name = "m20-ctrlmcu"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 rust-version = "1.88"
 description = "Deep Robotics M20 (Lynx) body control MCU on the AOS board's /dev/ttyS3: frame codec, LED / fill-light / fan / power commands, fan-speed and load-current replies, and a serial client that refuses power changes unless allowed"

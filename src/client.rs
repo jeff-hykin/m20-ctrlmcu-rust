@@ -142,7 +142,8 @@ impl<W: Write> Client<W> {
     }
 }
 
-/// Decode `port` on a thread, sending each frame on; the thread ends on a read error or when the receiver is gone.
+/// Decode `port` on a thread, sending each frame on; the thread ends on a read error, at EOF, or when the receiver is
+/// gone and the next frame arrives. To end it on a quiet port, pass a [`crate::serial::StoppableReader`] and stop it.
 pub fn spawn_reader<R: Read + Send + 'static>(
     mut port: R,
     mut decoder: Decoder,

@@ -1,5 +1,5 @@
 //! The wire frame: `EE EF | seq | 0x01 | type | func | len (u16 LE) | crc (u16 LE) | payload`, CRC-16/MODBUS over the
-//! payload only.
+//! payload only. The constants below are protocol constants, from the vendor's `ProtocolHandler` (see PROTOCOL.md).
 
 use std::fmt;
 
@@ -43,15 +43,26 @@ impl Frame {
         Self { sequence, version: VERSION, frame_type: HOST_FRAME_TYPE, func, crc, payload }
     }
 
+    /// The frame's bytes. A payload over 65535 bytes cannot be framed: [`Frame::try_encode`] refuses one, this writes
+    /// only its first 65535 bytes (every [`crate::Command`] payload is 16 bytes or fewer).
     pub fn encode(&self) -> Vec<u8> {
-        let length = self.payload.len() as u16;
-        let mut bytes = Vec::with_capacity(HEADER_LEN + self.payload.len());
+        let length = u16::try_from(self.payload.len()).unwrap_or(u16::MAX);
+        let payload = &self.payload[..usize::from(length)];
+        let mut bytes = Vec::with_capacity(HEADER_LEN + payload.len());
         bytes.extend_from_slice(&HEADER);
         bytes.extend_from_slice(&[self.sequence, self.version, self.frame_type, self.func]);
         bytes.extend_from_slice(&length.to_le_bytes());
         bytes.extend_from_slice(&self.crc.to_le_bytes());
-        bytes.extend_from_slice(&self.payload);
+        bytes.extend_from_slice(payload);
         bytes
+    }
+
+    /// The frame's bytes, or an error when the payload does not fit the 16-bit length.
+    pub fn try_encode(&self) -> Result<Vec<u8>, PayloadTooLong> {
+        if self.payload.len() > usize::from(u16::MAX) {
+            return Err(PayloadTooLong(self.payload.len()));
+        }
+        Ok(self.encode())
     }
 
     /// Whether the carried CRC matches the payload (the vendor host never checks replies).
@@ -117,6 +128,18 @@ impl fmt::Display for ParseError {
 
 impl std::error::Error for ParseError {}
 
+/// A payload (of this many bytes) over the 65535 the frame's 16-bit length can carry.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct PayloadTooLong(pub usize);
+
+impl fmt::Display for PayloadTooLong {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "a {}-byte payload does not fit a frame (65535 at most)", self.0)
+    }
+}
+
+impl std::error::Error for PayloadTooLong {}
+
 /// Bytes as `ee ef 01 ...`.
 pub fn hex(bytes: &[u8]) -> String {
     bytes.iter().map(|b| format!("{b:02x}")).collect::<Vec<_>>().join(" ")
@@ -168,7 +191,7 @@ impl Decoder {
         Self {
             buffer: Vec::new(),
             max_payload,
-            max_buffered: max_buffered.max(HEADER_LEN + max_payload),
+            max_buffered: max_buffered.max(HEADER_LEN.saturating_add(max_payload)),
             stats: DecoderStats::default(),
         }
     }
