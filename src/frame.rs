@@ -11,6 +11,8 @@ pub const HEADER_LEN: usize = 10;
 pub const VERSION: u8 = 0x01;
 /// Byte 4 (frame type) of every frame the vendor host builds.
 pub const HOST_FRAME_TYPE: u8 = 0x17;
+/// Byte 4 (frame type) of every reply the MCU sends (captured with the vendor's `open-print`, 2026-11-21).
+pub const MCU_FRAME_TYPE: u8 = 0x21;
 
 /// CRC-16/MODBUS (reflected poly 0xA001, init 0xFFFF), as `ProtocolHandler::build_frame` computes it.
 pub fn crc16_modbus(bytes: &[u8]) -> u16 {

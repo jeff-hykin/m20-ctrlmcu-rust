@@ -1,0 +1,21 @@
+# Every frame ctrlmcu_node logged receiving (open-print), 2026-11-21 on the AOS board (board log time CST, bytes);
+# 'start' rows are its 'success open serial' lines.
+2026-11-21 01:26:49	start
+2026-11-21 03:34:42	reply	ee ef 01 01 21 40 00 00 ff ff
+2026-11-21 03:34:42	reply	ee ef 02 01 21 40 00 00 ff ff
+2026-11-21 03:34:55	reply	ee ef 03 01 21 40 00 00 ff ff
+2026-11-21 03:34:55	reply	ee ef 04 01 21 40 00 00 ff ff
+2026-11-21 03:35:12	reply	ee ef 05 01 21 40 00 00 ff ff
+2026-11-21 03:35:19	reply	ee ef 06 01 21 40 00 00 ff ff
+2026-11-21 03:35:39	reply	ee ef 07 01 21 40 00 00 ff ff
+2026-11-21 03:35:47	reply	ee ef 08 01 21 40 00 00 ff ff
+2026-11-21 03:35:59	reply	ee ef 09 01 21 40 00 00 ff ff
+2026-11-21 03:36:00	reply	ee ef 0a 01 21 40 00 00 ff ff
+2026-11-21 03:42:06	reply	ee ef 0b 01 21 40 00 00 ff ff
+2026-11-21 03:42:17	reply	ee ef 0c 01 21 40 00 00 ff ff
+2026-11-21 03:42:19	reply	ee ef 0d 01 21 40 00 00 ff ff
+2026-11-21 03:42:25	reply	ee ef 0e 01 21 40 00 00 ff ff
+2026-11-21 03:42:29	reply	ee ef 0f 01 21 40 00 00 ff ff
+2026-11-21 03:42:32	reply	ee ef 10 01 21 40 00 00 ff ff
+2026-11-21 03:43:05	reply	ee ef 11 01 21 40 00 00 ff ff
+2026-11-21 03:43:12	reply	ee ef 12 01 21 40 00 00 ff ff

@@ -24,9 +24,12 @@ offset 0  1  2    3     4     5     6..7        8..9          10..
 - C: sequence: a per-process counter starting at 1, +1 per frame, 255 wraps to 1 (0 is skipped). Every logged run
   starts at 1 and counts without a gap.
 - C: no tail or terminator.
-- G: the MCU's replies use the same layout (the vendor finds `EE EF`, reads length from bytes 6-7 little-endian
-  and takes the payload from byte 10; it ignores the reply's sequence, type, function code and CRC). No reply has
-  been captured: the vendor prints them only when started with the `open-print` argument.
+- C: the MCU's replies use the same layout, with type `0x21` (the vendor finds `EE EF`, reads length from bytes 6-7
+  little-endian and takes the payload from byte 10; it ignores the reply's sequence, type, function code and CRC).
+  Captured with the vendor's `open-print` on 2026-11-21 (tests/fixtures/vendor_received_frames.tsv): 18 replies to
+  `/LED/STATUS`, each `EE EF seq 01 21 40 00 00 FF FF`: the request's function code echoed, an empty payload (CRC
+  `FF FF`), and a sequence counting 1, 2, ... like the host's own from its start (G: the request's sequence echoed).
+  No fan-speed or external-load-current reply was captured: nothing called those services in that window.
 - C: an unused vendor `parse_frame` reads the length big-endian; the path that is actually used reads it
   little-endian.
 

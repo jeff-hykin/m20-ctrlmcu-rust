@@ -10,5 +10,8 @@ pub mod serial;
 
 pub use client::{spawn_reader, Client, Exchange, Policy, Received, RequestError};
 pub use command::{Command, Effect, FrontBack, Func, LedEntry};
-pub use frame::{crc16_modbus, hex, Decoder, DecoderStats, Frame, ParseError, PayloadTooLong, Sequence};
+pub use frame::{
+    crc16_modbus, hex, Decoder, DecoderStats, Frame, ParseError, PayloadTooLong, Sequence, HOST_FRAME_TYPE,
+    MCU_FRAME_TYPE,
+};
 pub use reply::{FanSpeeds, Reply};
